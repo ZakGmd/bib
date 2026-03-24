@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Books - Library Management System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* CSS Variables for consistent design tokens */
+    :root {
+      /* Colors - Refined, professional palette */
+      --color-background: #FAFBFC;
+      --color-surface: #FFFFFF;
+      --color-surface-hover: #F8F9FA;
+      --color-border: #E5E9ED;
+      --color-border-hover: #D1D8DF;
+      
+      /* Text colors with hierarchy */
+      --color-text-primary: #1A202C;
+      --color-text-secondary: #4A5568;
+      --color-text-tertiary: #718096;
+      --color-text-muted: #A0AEC0;
+      
+      /* Accent colors */
+      --color-primary: #2C5AA0;
+      --color-primary-hover: #234780;
+      --color-success: #0F7B6C;
+      --color-success-light: #E6F7F5;
+      --color-warning: #D97706;
+      --color-warning-light: #FEF3E2;
+      
+      /* Spacing scale (8px base) */
+      --space-1: 0.25rem;   /* 4px */
+      --space-2: 0.5rem;    /* 8px */
+      --space-3: 0.75rem;   /* 12px */
+      --space-4: 1rem;      /* 16px */
+      --space-5: 1.5rem;    /* 24px */
+      --space-6: 2rem;      /* 32px */
+      --space-7: 2.5rem;    /* 40px */
+      --space-8: 3rem;      /* 48px */
+      --space-10: 4rem;     /* 64px */
+      
+      /* Typography */
+      --font-display: 'Crimson Pro', serif;
+      --font-body: 'DM Sans', sans-serif;
+      
+      /* Shadows - Subtle depth */
+      --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+      --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+      --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.06), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+      
+      /* Border radius */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      
+      /* Transitions */
+      --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    /* Reset and base styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: var(--font-body);
+      background-color: var(--color-background);
+      color: var(--color-text-primary);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    
+    /* Layout */
+    .app-container {
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      width: 280px;
+      background-color: var(--color-surface);
+      border-right: 1px solid var(--color-border);
+      padding: var(--space-6) var(--space-5);
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+    }
+    
+    .sidebar-header {
+      margin-bottom: var(--space-8);
+    }
+    
+    .logo {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-2);
+      letter-spacing: -0.02em;
+    }
+    
+    .logo-subtitle {
+      font-size: 0.875rem;
+      color: var(--color-text-tertiary);
+      font-weight: 500;
+    }
+    
+    .nav-menu {
+      list-style: none;
+      flex: 1;
+    }
+    
+    .nav-item {
+      margin-bottom: var(--space-1);
+    }
+    
+    .nav-link {
+      display: flex;
+      align-items: center;
+      padding: var(--space-3) var(--space-4);
+      text-decoration: none;
+      color: var(--color-text-secondary);
+      border-radius: var(--radius-md);
+      transition: all var(--transition-fast);
+      font-weight: 500;
+      font-size: 0.9375rem;
+    }
+    
+    .nav-link:hover {
+      background-color: var(--color-surface-hover);
+      color: var(--color-text-primary);
+    }
+    
+    .nav-link.active {
+      background-color: var(--color-primary);
+      color: white;
+    }
+    
+    .nav-icon {
+      width: 20px;
+      height: 20px;
+      margin-right: var(--space-3);
+      opacity: 0.8;
+    }
+    
+    .user-profile {
+      padding-top: var(--space-5);
+      border-top: 1px solid var(--color-border);
+      margin-top: auto;
+    }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+    }
+    
+    .user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+    
+    .user-details {
+      flex: 1;
+    }
+    
+    .user-name {
+      font-weight: 600;
+      font-size: 0.9375rem;
+      color: var(--color-text-primary);
+    }
+    
+    .user-role {
+      font-size: 0.8125rem;
+      color: var(--color-text-tertiary);
+    }
+    
+    /* Main content */
+    .main-content {
+      flex: 1;
+      padding: var(--space-6) var(--space-8);
+      max-width: 1600px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    
+    /* Header section */
+    .page-header {
+      margin-bottom: var(--space-8);
+    }
+    
+    .page-title {
+      font-family: var(--font-display);
+      font-size: 2.5rem;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-2);
+      letter-spacing: -0.03em;
+    }
+    
+    .page-subtitle {
+      font-size: 1rem;
+      color: var(--color-text-secondary);
+      font-weight: 400;
+    }
+    
+    /* Controls section */
+    .controls-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--space-5);
+      margin-bottom: var(--space-6);
+      flex-wrap: wrap;
+    }
+    
+    .search-filter-group {
+      display: flex;
+      gap: var(--space-3);
+      flex: 1;
+      max-width: 700px;
+    }
+    
+    .search-box {
+      flex: 1;
+      position: relative;
+    }
+    
+    .search-input {
+      width: 100%;
+      padding: var(--space-3) var(--space-4) var(--space-3) var(--space-8);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      background-color: var(--color-surface);
+      transition: all var(--transition-fast);
+      color: var(--color-text-primary);
+    }
+    
+    .search-input:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.1);
+    }
+    
+    .search-input::placeholder {
+      color: var(--color-text-muted);
+    }
+    
+    .search-icon {
+      position: absolute;
+      left: var(--space-4);
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      color: var(--color-text-tertiary);
+    }
+    
+    .filter-select {
+      padding: var(--space-3) var(--space-4);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      background-color: var(--color-surface);
+      color: var(--color-text-primary);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      font-weight: 500;
+      min-width: 160px;
+    }
+    
+    .filter-select:hover {
+      border-color: var(--color-border-hover);
+    }
+    
+    .filter-select:focus {
+      outline: none;
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(44, 90, 160, 0.1);
+    }
+    
+    .view-actions {
+      display: flex;
+      gap: var(--space-3);
+      align-items: center;
+    }
+    
+    .view-toggle {
+      display: flex;
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      padding: var(--space-1);
+    }
+    
+    .view-button {
+      padding: var(--space-2) var(--space-3);
+      background: none;
+      border: none;
+      cursor: pointer;
+      border-radius: var(--radius-sm);
+      transition: all var(--transition-fast);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-tertiary);
+    }
+    
+    .view-button:hover {
+      background-color: var(--color-surface-hover);
+      color: var(--color-text-primary);
+    }
+    
+    .view-button.active {
+      background-color: var(--color-primary);
+      color: white;
+    }
+    
+    .view-icon {
+      width: 20px;
+      height: 20px;
+    }
+    
+    .add-book-btn {
+      padding: var(--space-3) var(--space-5);
+      background-color: var(--color-primary);
+      color: white;
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: var(--font-body);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .add-book-btn:hover {
+      background-color: var(--color-primary-hover);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-1px);
+    }
+    
+    /* Books grid (card view) */
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: var(--space-5);
+      margin-bottom: var(--space-8);
+    }
+    
+    .books-grid.hidden {
+      display: none;
+    }
+    
+    .book-card {
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      transition: all var(--transition-base);
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow-xs);
+    }
+    
+    .book-card:hover {
+      border-color: var(--color-border-hover);
+      box-shadow: var(--shadow-md);
+      transform: translateY(-2px);
+    }
+    
+    .book-cover-container {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 1;
+      background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    
+    .book-cover {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .book-cover-placeholder {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--color-text-tertiary);
+      text-align: center;
+      padding: var(--space-5);
+      line-height: 1.3;
+    }
+    
+    .availability-badge {
+      position: absolute;
+      top: var(--space-3);
+      right: var(--space-3);
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-md);
+      font-size: 0.75rem;
+      font-weight: 600;
+      backdrop-filter: blur(8px);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .availability-badge.available {
+      background-color: var(--color-success-light);
+      color: var(--color-success);
+      border: 1px solid rgba(15, 123, 108, 0.2);
+    }
+    
+    .availability-badge.limited {
+      background-color: var(--color-warning-light);
+      color: var(--color-warning);
+      border: 1px solid rgba(217, 119, 6, 0.2);
+    }
+    
+    .availability-badge.unavailable {
+      background-color: rgba(255, 255, 255, 0.95);
+      color: var(--color-text-tertiary);
+      border: 1px solid var(--color-border);
+    }
+    
+    .book-info {
+      padding: var(--space-5);
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .book-category {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-primary);
+      margin-bottom: var(--space-2);
+    }
+    
+    .book-title {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      margin-bottom: var(--space-2);
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+    }
+    
+    .book-author {
+      font-size: 0.9375rem;
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-4);
+    }
+    
+    .book-meta {
+      display: flex;
+      gap: var(--space-4);
+      margin-bottom: var(--space-4);
+      padding-top: var(--space-4);
+      border-top: 1px solid var(--color-border);
+      font-size: 0.875rem;
+    }
+    
+    .meta-item {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .meta-label {
+      color: var(--color-text-tertiary);
+      font-size: 0.75rem;
+      margin-bottom: var(--space-1);
+    }
+    
+    .meta-value {
+      color: var(--color-text-primary);
+      font-weight: 600;
+    }
+    
+    .book-actions {
+      display: flex;
+      gap: var(--space-2);
+      margin-top: auto;
+    }
+    
+    .btn {
+      flex: 1;
+      padding: var(--space-3) var(--space-4);
+      border: none;
+      border-radius: var(--radius-md);
+      font-family: var(--font-body);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+    }
+    
+    .btn-primary {
+      background-color: var(--color-primary);
+      color: white;
+    }
+    
+    .btn-primary:hover {
+      background-color: var(--color-primary-hover);
+      transform: translateY(-1px);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .btn-secondary {
+      background-color: var(--color-surface);
+      color: var(--color-text-secondary);
+      border: 1px solid var(--color-border);
+    }
+    
+    .btn-secondary:hover {
+      background-color: var(--color-surface-hover);
+      border-color: var(--color-border-hover);
+      color: var(--color-text-primary);
+    }
+    
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+    
+    /* Books table (column view) */
+    .books-table-container {
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-xs);
+    }
+    
+    .books-table-container.hidden {
+      display: none;
+    }
+    
+    .books-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    
+    .books-table thead {
+      background-color: var(--color-background);
+    }
+    
+    .books-table th {
+      padding: var(--space-4) var(--space-5);
+      text-align: left;
+      font-size: 0.8125rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-tertiary);
+      border-bottom: 1px solid var(--color-border);
+    }
+    
+    .books-table tbody tr {
+      border-bottom: 1px solid var(--color-border);
+      transition: background-color var(--transition-fast);
+    }
+    
+    .books-table tbody tr:last-child {
+      border-bottom: none;
+    }
+    
+    .books-table tbody tr:hover {
+      background-color: var(--color-surface-hover);
+    }
+    
+    .books-table td {
+      padding: var(--space-4) var(--space-5);
+      color: var(--color-text-secondary);
+      font-size: 0.9375rem;
+    }
+    
+    .table-book-info {
+      display: flex;
+      align-items: center;
+      gap: var(--space-4);
+    }
+    
+    .table-book-cover {
+      width: 48px;
+      height: 48px;
+      border-radius: var(--radius-sm);
+      background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--color-text-tertiary);
+      flex-shrink: 0;
+    }
+    
+    .table-book-details {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .table-book-title {
+      font-family: var(--font-display);
+      font-weight: 700;
+      color: var(--color-text-primary);
+      font-size: 1rem;
+      margin-bottom: var(--space-1);
+      letter-spacing: -0.01em;
+    }
+    
+    .table-book-author {
+      font-size: 0.875rem;
+      color: var(--color-text-secondary);
+    }
+    
+    .category-tag {
+      display: inline-block;
+      padding: var(--space-2) var(--space-3);
+      background-color: var(--color-background);
+      border-radius: var(--radius-sm);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+    }
+    
+    .availability-indicator {
+      display: flex;
+      align-items: center;
+      gap: var(--space-2);
+    }
+    
+    .availability-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+    
+    .availability-dot.available {
+      background-color: var(--color-success);
+    }
+    
+    .availability-dot.limited {
+      background-color: var(--color-warning);
+    }
+    
+    .availability-dot.unavailable {
+      background-color: var(--color-text-muted);
+    }
+    
+    .availability-text {
+      font-weight: 600;
+      color: var(--color-text-primary);
+    }
+    
+    .table-actions {
+      display: flex;
+      gap: var(--space-2);
+      justify-content: flex-end;
+    }
+    
+    .icon-btn {
+      padding: var(--space-2);
+      background: none;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--color-text-secondary);
+    }
+    
+    .icon-btn:hover {
+      background-color: var(--color-surface-hover);
+      border-color: var(--color-border-hover);
+      color: var(--color-text-primary);
+    }
+    
+    .icon-btn svg {
+      width: 18px;
+      height: 18px;
+    }
+    
+    /* Stats bar */
+    .stats-bar {
+      display: flex;
+      gap: var(--space-5);
+      margin-bottom: var(--space-6);
+      padding: var(--space-5);
+      background-color: var(--color-surface);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+    }
+    
+    .stat-item {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .stat-label {
+      font-size: 0.875rem;
+      color: var(--color-text-tertiary);
+      margin-bottom: var(--space-2);
+    }
+    
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--color-text-primary);
+      letter-spacing: -0.02em;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">Bibliotheca</div>
+        <div class="logo-subtitle">Library Management</div>
+      </div>
+      
+      <nav>
+        <ul class="nav-menu">
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+              </svg>
+              Dashboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link active">
+              <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+              </svg>
+              Books
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+              Loan Requests
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
+              </svg>
+              Members
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="#" class="nav-link">
+              <svg class="nav-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+              </svg>
+              Authors
+            </a>
+          </li>
+        </ul>
+      </nav>
+      
+      <div class="user-profile">
+        <div class="user-info">
+          <div class="user-avatar">ZG</div>
+          <div class="user-details">
+            <div class="user-name">Zakaria</div>
+            <div class="user-role">Librarian</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+    
+    <!-- Main content -->
+    <main class="main-content">
+      <!-- Page header -->
+      <header class="page-header">
+        <h1 class="page-title">Books Collection</h1>
+        <p class="page-subtitle">Manage your library's catalog and track book availability</p>
+      </header>
+      
+      <!-- Stats -->
+      <div class="stats-bar">
+        <div class="stat-item">
+          <div class="stat-label">Total Books</div>
+          <div class="stat-value">247</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Available</div>
+          <div class="stat-value">198</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">On Loan</div>
+          <div class="stat-value">49</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-label">Categories</div>
+          <div class="stat-value">12</div>
+        </div>
+      </div>
+      
+      <!-- Controls -->
+      <div class="controls-section">
+        <div class="search-filter-group">
+          <div class="search-box">
+            <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+            <input type="text" class="search-input" placeholder="Search by title, author, or ISBN..." id="searchInput">
+          </div>
+          
+          <select class="filter-select" id="categoryFilter">
+            <option value="all">All Categories</option>
+            <option value="technology">Technology</option>
+            <option value="fiction">Fiction</option>
+            <option value="science">Science</option>
+            <option value="history">History</option>
+            <option value="philosophy">Philosophy</option>
+          </select>
+          
+          <select class="filter-select" id="availabilityFilter">
+            <option value="all">All Books</option>
+            <option value="available">Available</option>
+            <option value="limited">Limited Stock</option>
+            <option value="unavailable">Unavailable</option>
+          </select>
+        </div>
+        
+        <div class="view-actions">
+          <div class="view-toggle">
+            <button class="view-button active" id="cardViewBtn" title="Card View">
+              <svg class="view-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+              </svg>
+            </button>
+            <button class="view-button" id="tableViewBtn" title="Table View">
+              <svg class="view-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+              </svg>
+            </button>
+          </div>
+          
+          <button class="add-book-btn">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
+            </svg>
+            Add New Book
+          </button>
+        </div>
+      </div>
+      
+      <!-- Books grid (card view) -->
+      <div class="books-grid" id="booksGrid">
+        <!-- Book card 1 -->
+        <article class="book-card">
+          <div class="book-cover-container">
+            <div class="book-cover-placeholder">Clean Code</div>
+            <span class="availability-badge available">3 Available</span>
+          </div>
+          <div class="book-info">
+            <div class="book-category">Technology</div>
+            <h3 class="book-title">Clean Code: A Handbook of Agile Software Craftsmanship</h3>
+            <p class="book-author">Robert C. Martin</p>
+            <div class="book-meta">
+              <div class="meta-item">
+                <span class="meta-label">Published</span>
+                <span class="meta-value">2008</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Copies</span>
+                <span class="meta-value">3 / 3</span>
+              </div>
+            </div>
+            <div class="book-actions">
+              <button class="btn btn-primary">Request Loan</button>
+              <button class="btn btn-secondary">View Details</button>
+            </div>
+          </div>
+        </article>
+        
+        <!-- Book card 2 -->
+        <article class="book-card">
+          <div class="book-cover-container">
+            <div class="book-cover-placeholder">Refactoring</div>
+            <span class="availability-badge available">2 Available</span>
+          </div>
+          <div class="book-info">
+            <div class="book-category">Technology</div>
+            <h3 class="book-title">Refactoring: Improving the Design of Existing Code</h3>
+            <p class="book-author">Martin Fowler</p>
+            <div class="book-meta">
+              <div class="meta-item">
+                <span class="meta-label">Published</span>
+                <span class="meta-value">2018</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Copies</span>
+                <span class="meta-value">2 / 2</span>
+              </div>
+            </div>
+            <div class="book-actions">
+              <button class="btn btn-primary">Request Loan</button>
+              <button class="btn btn-secondary">View Details</button>
+            </div>
+          </div>
+        </article>
+        
+        <!-- Book card 3 -->
+        <article class="book-card">
+          <div class="book-cover-container">
+            <div class="book-cover-placeholder">One Hundred Years of Solitude</div>
+            <span class="availability-badge limited">1 Available</span>
+          </div>
+          <div class="book-info">
+            <div class="book-category">Fiction</div>
+            <h3 class="book-title">One Hundred Years of Solitude</h3>
+            <p class="book-author">Gabriel García Márquez</p>
+            <div class="book-meta">
+              <div class="meta-item">
+                <span class="meta-label">Published</span>
+                <span class="meta-value">1967</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Copies</span>
+                <span class="meta-value">1 / 2</span>
+              </div>
+            </div>
+            <div class="book-actions">
+              <button class="btn btn-primary">Request Loan</button>
+              <button class="btn btn-secondary">View Details</button>
+            </div>
+          </div>
+        </article>
+        
+        <!-- Book card 4 -->
+        <article class="book-card">
+          <div class="book-cover-container">
+            <div class="book-cover-placeholder">The Pragmatic Programmer</div>
+            <span class="availability-badge unavailable">0 Available</span>
+          </div>
+          <div class="book-info">
+            <div class="book-category">Technology</div>
+            <h3 class="book-title">The Pragmatic Programmer</h3>
+            <p class="book-author">David Thomas, Andrew Hunt</p>
+            <div class="book-meta">
+              <div class="meta-item">
+                <span class="meta-label">Published</span>
+                <span class="meta-value">2019</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Copies</span>
+                <span class="meta-value">0 / 2</span>
+              </div>
+            </div>
+            <div class="book-actions">
+              <button class="btn btn-primary" disabled>Request Loan</button>
+              <button class="btn btn-secondary">View Details</button>
+            </div>
+          </div>
+        </article>
+        
+        <!-- Book card 5 -->
+        <article class="book-card">
+          <div class="book-cover-container">
+            <div class="book-cover-placeholder">Sapiens</div>
+            <span class="availability-badge available">4 Available</span>
+          </div>
+          <div class="book-info">
+            <div class="book-category">History</div>
+            <h3 class="book-title">Sapiens: A Brief History of Humankind</h3>
+            <p class="book-author">Yuval Noah Harari</p>
+            <div class="book-meta">
+              <div class="meta-item">
+                <span class="meta-label">Published</span>
+                <span class="meta-value">2011</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Copies</span>
+                <span class="meta-value">4 / 4</span>
+              </div>
+            </div>
+            <div class="book-actions">
+              <button class="btn btn-primary">Request Loan</button>
+              <button class="btn btn-secondary">View Details</button>
+            </div>
+          </div>
+        </article>
+        
+        <!-- Book card 6 -->
+        <article class="book-card">
+          <div class="book-cover-container">
+            <div class="book-cover-placeholder">Design Patterns</div>
+            <span class="availability-badge limited">1 Available</span>
+          </div>
+          <div class="book-info">
+            <div class="book-category">Technology</div>
+            <h3 class="book-title">Design Patterns: Elements of Reusable Object-Oriented Software</h3>
+            <p class="book-author">Gang of Four</p>
+            <div class="book-meta">
+              <div class="meta-item">
+                <span class="meta-label">Published</span>
+                <span class="meta-value">1994</span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Copies</span>
+                <span class="meta-value">1 / 3</span>
+              </div>
+            </div>
+            <div class="book-actions">
+              <button class="btn btn-primary">Request Loan</button>
+              <button class="btn btn-secondary">View Details</button>
+            </div>
+          </div>
+        </article>
+      </div>
+      
+      <!-- Books table (column view) -->
+      <div class="books-table-container hidden" id="booksTable">
+        <table class="books-table">
+          <thead>
+            <tr>
+              <th>Book</th>
+              <th>Category</th>
+              <th>Published</th>
+              <th>Availability</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="table-book-info">
+                  <div class="table-book-cover">CC</div>
+                  <div class="table-book-details">
+                    <div class="table-book-title">Clean Code: A Handbook of Agile Software Craftsmanship</div>
+                    <div class="table-book-author">Robert C. Martin</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="category-tag">Technology</span>
+              </td>
+              <td>2008</td>
+              <td>
+                <div class="availability-indicator">
+                  <span class="availability-dot available"></span>
+                  <span class="availability-text">3 / 3</span>
+                </div>
+              </td>
+              <td>
+                <div class="table-actions">
+                  <button class="icon-btn" title="Request Loan">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                  </button>
+                  <button class="icon-btn" title="View Details">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="table-book-info">
+                  <div class="table-book-cover">RF</div>
+                  <div class="table-book-details">
+                    <div class="table-book-title">Refactoring: Improving the Design of Existing Code</div>
+                    <div class="table-book-author">Martin Fowler</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="category-tag">Technology</span>
+              </td>
+              <td>2018</td>
+              <td>
+                <div class="availability-indicator">
+                  <span class="availability-dot available"></span>
+                  <span class="availability-text">2 / 2</span>
+                </div>
+              </td>
+              <td>
+                <div class="table-actions">
+                  <button class="icon-btn" title="Request Loan">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                  </button>
+                  <button class="icon-btn" title="View Details">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="table-book-info">
+                  <div class="table-book-cover">OS</div>
+                  <div class="table-book-details">
+                    <div class="table-book-title">One Hundred Years of Solitude</div>
+                    <div class="table-book-author">Gabriel García Márquez</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="category-tag">Fiction</span>
+              </td>
+              <td>1967</td>
+              <td>
+                <div class="availability-indicator">
+                  <span class="availability-dot limited"></span>
+                  <span class="availability-text">1 / 2</span>
+                </div>
+              </td>
+              <td>
+                <div class="table-actions">
+                  <button class="icon-btn" title="Request Loan">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                  </button>
+                  <button class="icon-btn" title="View Details">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="table-book-info">
+                  <div class="table-book-cover">PP</div>
+                  <div class="table-book-details">
+                    <div class="table-book-title">The Pragmatic Programmer</div>
+                    <div class="table-book-author">David Thomas, Andrew Hunt</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="category-tag">Technology</span>
+              </td>
+              <td>2019</td>
+              <td>
+                <div class="availability-indicator">
+                  <span class="availability-dot unavailable"></span>
+                  <span class="availability-text">0 / 2</span>
+                </div>
+              </td>
+              <td>
+                <div class="table-actions">
+                  <button class="icon-btn" disabled title="Request Loan">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                  </button>
+                  <button class="icon-btn" title="View Details">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="table-book-info">
+                  <div class="table-book-cover">SA</div>
+                  <div class="table-book-details">
+                    <div class="table-book-title">Sapiens: A Brief History of Humankind</div>
+                    <div class="table-book-author">Yuval Noah Harari</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="category-tag">History</span>
+              </td>
+              <td>2011</td>
+              <td>
+                <div class="availability-indicator">
+                  <span class="availability-dot available"></span>
+                  <span class="availability-text">4 / 4</span>
+                </div>
+              </td>
+              <td>
+                <div class="table-actions">
+                  <button class="icon-btn" title="Request Loan">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                  </button>
+                  <button class="icon-btn" title="View Details">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="table-book-info">
+                  <div class="table-book-cover">DP</div>
+                  <div class="table-book-details">
+                    <div class="table-book-title">Design Patterns: Elements of Reusable Object-Oriented Software</div>
+                    <div class="table-book-author">Gang of Four</div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="category-tag">Technology</span>
+              </td>
+              <td>1994</td>
+              <td>
+                <div class="availability-indicator">
+                  <span class="availability-dot limited"></span>
+                  <span class="availability-text">1 / 3</span>
+                </div>
+              </td>
+              <td>
+                <div class="table-actions">
+                  <button class="icon-btn" title="Request Loan">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                    </svg>
+                  </button>
+                  <button class="icon-btn" title="View Details">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </main>
+  </div>
+  
+  <script>
+    // View toggle functionality
+    const cardViewBtn = document.getElementById('cardViewBtn');
+    const tableViewBtn = document.getElementById('tableViewBtn');
+    const booksGrid = document.getElementById('booksGrid');
+    const booksTable = document.getElementById('booksTable');
+    
+    cardViewBtn.addEventListener('click', () => {
+      cardViewBtn.classList.add('active');
+      tableViewBtn.classList.remove('active');
+      booksGrid.classList.remove('hidden');
+      booksTable.classList.add('hidden');
+    });
+    
+    tableViewBtn.addEventListener('click', () => {
+      tableViewBtn.classList.add('active');
+      cardViewBtn.classList.remove('active');
+      booksTable.classList.remove('hidden');
+      booksGrid.classList.add('hidden');
+    });
+    
+    // Simple search functionality (demo)
+    const searchInput = document.getElementById('searchInput');
+    searchInput.addEventListener('input', (e) => {
+      const searchTerm = e.target.value.toLowerCase();
+      console.log('Searching for:', searchTerm);
+      // In real implementation, this would filter the books
+    });
+    
+    // Filter functionality (demo)
+    const categoryFilter = document.getElementById('categoryFilter');
+    const availabilityFilter = document.getElementById('availabilityFilter');
+    
+    categoryFilter.addEventListener('change', (e) => {
+      console.log('Category filter:', e.target.value);
+      // In real implementation, this would filter the books
+    });
+    
+    availabilityFilter.addEventListener('change', (e) => {
+      console.log('Availability filter:', e.target.value);
+      // In real implementation, this would filter the books
+    });
+  </script>
+</body>
+</html>
