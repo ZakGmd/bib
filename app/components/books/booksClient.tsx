@@ -20,9 +20,11 @@ type Book = {
 
 type BooksClientProps = {
   books: Book[]
+  isAuthenticated: boolean
+  activeLoanBookIds: string[]
 }
 
-export function BooksClient({ books }: BooksClientProps) {
+export function BooksClient({ books, isAuthenticated, activeLoanBookIds }: BooksClientProps) {
   // Simple state - easy for students to understand
   const [viewMode, setViewMode] = useState<"card" | "table">("card")
   const [searchQuery, setSearchQuery] = useState("")
@@ -139,7 +141,7 @@ export function BooksClient({ books }: BooksClientProps) {
           </div>
           
           <div className="flex gap-3 items-center">
-            {/* View toggle - simple onClick with setState */}
+            {/* View toggle */}
             <div className="flex bg-white border border-[#E5E9ED] rounded-lg p-1">
               <button
                 type="button"
@@ -168,13 +170,6 @@ export function BooksClient({ books }: BooksClientProps) {
                 </svg>
               </button>
             </div>
-            
-            <button className="px-5 py-3 bg-[#2C5AA0] text-white rounded-lg text-[0.9375rem] font-semibold hover:bg-[#234780] transition-all duration-150 shadow-sm hover:shadow-md hover:-translate-y-px flex items-center gap-2">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
-              </svg>
-              Add New Book
-            </button>
           </div>
         </div>
         
@@ -182,17 +177,19 @@ export function BooksClient({ books }: BooksClientProps) {
         {viewMode === "card" ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-12">
             {filteredBooks.map(book => (
-              <BookCard 
+              <BookCard
                 key={book.id}
                 book={book}
-                isAuthenticated={true}
+                isAuthenticated={isAuthenticated}
+                isAlreadyRequested={activeLoanBookIds.includes(book.id)}
               />
             ))}
           </div>
         ) : (
-          <BookTable 
+          <BookTable
             books={filteredBooks}
-            isAuthenticated={true}
+            isAuthenticated={isAuthenticated}
+            activeLoanBookIds={activeLoanBookIds}
           />
         )}
         

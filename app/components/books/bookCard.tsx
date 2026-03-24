@@ -1,5 +1,6 @@
 // components/books/BookCard.tsx
 import Link from "next/link"
+import { RequestLoanButton } from "./requestLoanButton"
 
 interface Book {
   id: string
@@ -16,9 +17,10 @@ interface Book {
 interface BookCardProps {
   book: Book
   isAuthenticated: boolean
+  isAlreadyRequested: boolean
 }
 
-export function BookCard({ book, isAuthenticated }: BookCardProps) {
+export function BookCard({ book, isAuthenticated, isAlreadyRequested }: BookCardProps) {
   const isAvailable = book.availableCopies > 0
   const isLimited = book.availableCopies === 1
   const isUnavailable = book.availableCopies === 0
@@ -83,18 +85,13 @@ export function BookCard({ book, isAuthenticated }: BookCardProps) {
         {/* Actions */}
         <div className="flex gap-2 mt-auto">
           {isAuthenticated ? (
-            <button 
-              disabled={isUnavailable}
-              className={`flex-1 px-4 py-3 rounded-lg text-sm font-semibold transition-all duration-150 flex items-center justify-center gap-2 ${
-                isUnavailable
-                  ? 'bg-white text-[#4A5568] border border-[#E5E9ED] opacity-50 cursor-not-allowed'
-                  : 'bg-[#2C5AA0] text-white hover:bg-[#234780] hover:-translate-y-px hover:shadow-sm'
-              }`}
-            >
-              Request Loan
-            </button>
+            <RequestLoanButton
+              bookId={book.id}
+              isAlreadyRequested={isAlreadyRequested}
+              isUnavailable={isUnavailable}
+            />
           ) : (
-            <Link 
+            <Link
               href="/login"
               className="flex-1 px-4 py-3 bg-[#2C5AA0] text-white rounded-lg text-sm font-semibold hover:bg-[#234780] transition-all duration-150 hover:-translate-y-px hover:shadow-sm text-center"
             >

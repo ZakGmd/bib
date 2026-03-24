@@ -1,5 +1,6 @@
 // components/books/BookTable.tsx
 import Link from "next/link"
+import { RequestLoanButton } from "./requestLoanButton"
 
 interface Book {
   id: string
@@ -15,9 +16,10 @@ interface Book {
 interface BookTableProps {
   books: Book[]
   isAuthenticated: boolean
+  activeLoanBookIds: string[]
 }
 
-export function BookTable({ books, isAuthenticated }: BookTableProps) {
+export function BookTable({ books, isAuthenticated, activeLoanBookIds }: BookTableProps) {
   return (
     <div className="bg-white border border-[#E5E9ED] rounded-xl overflow-hidden shadow-[0_1px_2px_0_rgba(0,0,0,0.03)]">
       <table className="w-full border-collapse">
@@ -98,15 +100,17 @@ export function BookTable({ books, isAuthenticated }: BookTableProps) {
                 {/* Actions */}
                 <td className="px-5 py-4">
                   <div className="flex gap-2 justify-end">
-                    <button 
-                      disabled={isUnavailable}
-                      className="p-2 bg-white border border-[#E5E9ED] rounded transition-all duration-150 flex items-center justify-center text-[#4A5568] hover:bg-[#F8F9FA] hover:border-[#D1D8DF] hover:text-[#1A202C] disabled:opacity-50 disabled:cursor-not-allowed"
-                      title="Request Loan"
-                    >
-                      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
-                      </svg>
-                    </button>
+                    {isAuthenticated ? (
+                      <RequestLoanButton
+                        bookId={book.id}
+                        isAlreadyRequested={activeLoanBookIds.includes(book.id)}
+                        isUnavailable={isUnavailable}
+                      />
+                    ) : (
+                      <Link href="/login" className="px-3 py-1.5 bg-[#2C5AA0] text-white rounded-lg text-xs font-semibold hover:bg-[#234780] transition-all duration-150">
+                        Login
+                      </Link>
+                    )}
                     <Link 
                       href={`/books/${book.id}`}
                       className="p-2 bg-white border border-[#E5E9ED] rounded transition-all duration-150 flex items-center justify-center text-[#4A5568] hover:bg-[#F8F9FA] hover:border-[#D1D8DF] hover:text-[#1A202C]"
