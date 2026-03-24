@@ -307,14 +307,14 @@ export default function BooksPage() {
               <BookCard 
                 key={book.id}
                 book={book}
-                isAuthenticated={false}
+                isAuthenticated={true}
               />
             ))}
           </div>
         ) : (
           <BookTable 
             books={filteredBooks}
-            isAuthenticated={false}
+            isAuthenticated={true}
           />
         )}
         

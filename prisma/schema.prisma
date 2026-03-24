@@ -1,13 +1,120 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../app/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String   // Hashed with bcrypt
+  role      UserRole
+  phone     String?
+  address   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  loans     Loan[]
+  
+  @@index([email])
+  @@index([role])
+}
+
+enum UserRole {
+  STUDENT
+  PROFESSOR
+  LIBRARIAN
+  ADMIN
+}
+
+model Author {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  bio       String?  @db.Text
+  photoUrl  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  books     BookAuthor[]
+  
+  @@index([name])
+}
+
+model Book {
+  id              String   @id @default(cuid())
+  title           String
+  isbn            String?  @unique
+  publisher       String?
+  publishedYear   Int?
+  category        String?
+  description     String?  @db.Text
+  coverUrl        String?
+  totalCopies     Int      @default(1)
+  availableCopies Int      @default(1)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  authors         BookAuthor[]
+  loans           Loan[]
+  
+  @@index([category])
+  @@index([title])
+}
+
+model BookAuthor {
+  id        String   @id @default(cuid())
+  bookId    String
+  authorId  String
+  order     Int      @default(1)
+  book      Book     @relation(fields: [bookId], references: [id], onDelete: Cascade)
+  author    Author   @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  
+  @@unique([bookId, authorId])
+  @@index([bookId])
+  @@index([authorId])
+}
+
+model Loan {
+  id          String     @id @default(cuid())
+  bookId      String
+  userId      String
+  requestDate DateTime   @default(now())
+  approvedAt  DateTime?
+  loanDate    DateTime?
+  dueDate     DateTime?
+  returnDate  DateTime?
+  status      LoanStatus @default(PENDING)
+  approvedBy  String?
+  notes       String?    @db.Text
+  book        Book       @relation(fields: [bookId], references: [id], onDelete: Restrict)
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  
+  @@index([bookId])
+  @@index([userId])
+  @@index([status])
+  @@index([dueDate])
+}
+
+enum LoanStatus {
+  PENDING
+  APPROVED
+  DENIED
+  RETURNED
+  OVERDUE
+}
+
+model Contact {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String   @db.Text
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  
+  @@index([createdAt])
+  @@index([read])
 }
