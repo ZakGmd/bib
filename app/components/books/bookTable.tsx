@@ -6,7 +6,7 @@ interface Book {
   title: string
   authors: string[]
   category: string
-  publishedYear: number
+  publishedYear: number | null
   availableCopies: number
   totalCopies: number
   coverUrl: string | null
