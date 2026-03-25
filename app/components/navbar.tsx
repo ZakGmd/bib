@@ -10,28 +10,33 @@ export async function Navbar() {
       <div className="max-w-[1600px] mx-auto px-6 md:px-8 h-14 flex items-center justify-between">
 
         {/* Logo */}
-        <Link href="/books" className="flex items-center gap-2.5 group">
-          <div className="w-7 h-7 bg-[#2C5AA0] rounded-lg flex items-center justify-center shadow-[0_2px_6px_0_rgba(44,90,160,0.25)]">
-            <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-            </svg>
-          </div>
-          <span className="font-serif font-bold text-[#1A202C] text-[1.0625rem] group-hover:text-[#2C5AA0] transition-colors duration-150">
-            LibraryMS
-          </span>
+        <Link href={session?.user?.role === "LIBRARIAN" || session?.user?.role === "ADMIN" ? "/dashboard" : "/books"} className="flex items-center gap-2.5 group">
+          <div className="flex items-center gap-2.5">
+           <img src="bib/public/logo.png"  className="h-8 w-auto rounded-lg" />
+           <span className="font-serif font-bold text-[#1A202C] text-[1.0625rem]">BIB-ESTO</span>
+         </div>
         </Link>
+
+        {/* Nav links — guests & students only */}
+        {(!session || (session.user.role !== "LIBRARIAN" && session.user.role !== "ADMIN")) && (
+          <nav className="hidden md:flex items-center gap-7">
+            <Link href="/" className="text-sm font-medium text-[#4A5568] hover:text-[#1A202C] transition-colors duration-150">Home</Link>
+            <Link href="/books" className="text-sm font-medium text-[#4A5568] hover:text-[#1A202C] transition-colors duration-150">Books</Link>
+            <Link href="/about" className="text-sm font-medium text-[#4A5568] hover:text-[#1A202C] transition-colors duration-150">About</Link>
+          </nav>
+        )}
 
         {/* Right side */}
         <div className="flex items-center gap-6">
           {session ? (
             <>
-              <Link href="/my-loans" className="text-sm font-medium text-[#4A5568] hover:text-[#1A202C] transition-colors duration-150">
-                My Loans
-              </Link>
-
-              {(session.user.role === "LIBRARIAN" || session.user.role === "ADMIN") && (
+              {session.user.role === "LIBRARIAN" || session.user.role === "ADMIN" ? (
                 <Link href="/dashboard" className="text-sm font-medium text-[#4A5568] hover:text-[#1A202C] transition-colors duration-150">
                   Dashboard
+                </Link>
+              ) : (
+                <Link href="/my-loans" className="text-sm font-medium text-[#4A5568] hover:text-[#1A202C] transition-colors duration-150">
+                  My Loans
                 </Link>
               )}
 

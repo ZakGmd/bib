@@ -79,24 +79,19 @@ export function BooksClient({ books, isAuthenticated, activeLoanBookIds }: Books
           <p className="text-base text-[#4A5568]">Manage your library's catalog and track book availability</p>
         </header>
         
-        {/* Stats bar */}
-        <div className="flex gap-5 mb-6 p-5 bg-white border border-[#E5E9ED] rounded-xl">
-          <div className="flex flex-col">
-            <div className="text-sm text-[#718096] mb-2">Total Books</div>
-            <div className="font-serif text-[1.75rem] font-bold text-[#1A202C] tracking-tight">{totalBooks}</div>
-          </div>
-          <div className="flex flex-col">
-            <div className="text-sm text-[#718096] mb-2">Available</div>
-            <div className="font-serif text-[1.75rem] font-bold text-[#1A202C] tracking-tight">{availableBooks}</div>
-          </div>
-          <div className="flex flex-col">
-            <div className="text-sm text-[#718096] mb-2">On Loan</div>
-            <div className="font-serif text-[1.75rem] font-bold text-[#1A202C] tracking-tight">{onLoan}</div>
-          </div>
-          <div className="flex flex-col">
-            <div className="text-sm text-[#718096] mb-2">Categories</div>
-            <div className="font-serif text-[1.75rem] font-bold text-[#1A202C] tracking-tight">{categories.length}</div>
-          </div>
+        {/* Stats */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+          {[
+            { label: "Total Books",  value: totalBooks,        color: "text-[#1A202C]" },
+            { label: "Available",    value: availableBooks,    color: "text-[#0F7B6C]" },
+            { label: "On Loan",      value: onLoan,            color: "text-[#D97706]" },
+            { label: "Categories",   value: categories.length, color: "text-[#2C5AA0]" },
+          ].map(({ label, value, color }) => (
+            <div key={label} className="bg-white border border-[#E5E9ED] rounded-xl p-5 shadow-[0_1px_2px_0_rgba(0,0,0,0.03)]">
+              <p className="text-sm text-[#718096] mb-1.5">{label}</p>
+              <p className={`font-serif text-[2rem] font-bold tracking-tight ${color}`}>{value}</p>
+            </div>
+          ))}
         </div>
         
         {/* Controls */}

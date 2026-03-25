@@ -35,6 +35,7 @@ export default async function MyLoansPage() {
       authors: loan.book.authors.map((ba) => ba.author.name),
       category: loan.book.category,
       coverUrl: loan.book.coverUrl,
+      isbn: loan.book.isbn ?? null,
     },
   }))
 

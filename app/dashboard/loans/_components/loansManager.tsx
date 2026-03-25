@@ -63,7 +63,7 @@ export function LoansManager({ loans }: { loans: Loan[] }) {
   }
 
   return (
-    <div className="p-8">
+    <div className="p-8 h-screen">
       {/* Header */}
       <header className="mb-8">
         <h1 className="font-serif text-[2rem] font-bold text-[#1A202C] tracking-tight mb-1">Loan Management</h1>

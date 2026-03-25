@@ -1,4 +1,5 @@
 // components/books/BookTable.tsx
+import Image from "next/image"
 import Link from "next/link"
 import { RequestLoanButton } from "./requestLoanButton"
 
@@ -11,6 +12,7 @@ interface Book {
   availableCopies: number
   totalCopies: number
   coverUrl: string | null
+  isbn: string | null
 }
 
 interface BookTableProps {
@@ -57,8 +59,19 @@ export function BookTable({ books, isAuthenticated, activeLoanBookIds }: BookTab
                 {/* Book info with thumbnail */}
                 <td className="px-5 py-4">
                   <div className="flex items-center gap-4">
-                    <div className="w-12 h-12 rounded flex-shrink-0 bg-gradient-to-br from-[#f5f7fa] to-[#e8ecf1] flex items-center justify-center font-serif text-sm font-bold text-[#718096]">
-                      {book.title.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()}
+                    
+                    <div className="w-12 h-12 rounded flex-shrink-0 bg-gradient-to-br from-[#f5f7fa] to-[#e8ecf1] flex items-center justify-center font-serif text-sm font-bold text-[#718096] overflow-hidden relative">
+                      {book.isbn ? (
+                        <Image
+                          src={`https://covers.openlibrary.org/b/isbn/${book.isbn}-S.jpg`}
+                          alt={book.title}
+                          fill
+                          className="object-cover"
+                          unoptimized
+                        />
+                      ) : (
+                        book.title.split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase()
+                      )}
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="font-serif font-bold text-[#1A202C] text-base mb-1 tracking-tight">

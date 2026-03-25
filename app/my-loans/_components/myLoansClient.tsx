@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react"
 import { cancelLoan } from "@/app/actions/loans"
+import Image from "next/image"
 import Link from "next/link"
 
 type Loan = {
@@ -19,6 +20,7 @@ type Loan = {
     authors: string[]
     category: string | null
     coverUrl: string | null
+    isbn: string | null
   }
 }
 
@@ -155,8 +157,18 @@ export function MyLoansClient({ loans, userName }: { loans: Loan[]; userName: st
                   return (
                     <div key={loan.id} className="flex items-center gap-5 px-6 py-4 hover:bg-[#F8F9FA] transition-colors duration-100">
                       {/* Book icon */}
-                      <div className="w-11 h-11 rounded-lg bg-gradient-to-br from-[#f5f7fa] to-[#e8ecf1] flex items-center justify-center shrink-0 font-serif text-sm font-bold text-[#718096]">
-                        {loan.book.title.charAt(0)}
+                      <div className="w-11 h-11 rounded-lg bg-gradient-to-br from-[#f5f7fa] to-[#e8ecf1] flex items-center justify-center shrink-0 font-serif text-sm font-bold text-[#718096] overflow-hidden relative">
+                        {loan.book.isbn ? (
+                          <Image
+                            src={`https://covers.openlibrary.org/b/isbn/${loan.book.isbn}-S.jpg`}
+                            alt={loan.book.title}
+                            fill
+                            className="object-cover"
+                            unoptimized
+                          />
+                        ) : (
+                          loan.book.title.charAt(0)
+                        )}
                       </div>
 
                       {/* Book info */}

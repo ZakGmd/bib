@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma"
 import { auth } from "@/auth"
 import { notFound } from "next/navigation"
+import Image from "next/image"
 import Link from "next/link"
 import { Navbar } from "@/app/components/navbar"
 import { RequestLoanButton } from "@/app/components/books/requestLoanButton"
@@ -53,10 +54,20 @@ export default async function BookDetailPage({ params }: { params: Promise<{ id:
             <div className="flex flex-col gap-4">
               {/* Cover */}
               <div className="bg-white border border-[#E5E9ED] rounded-xl overflow-hidden shadow-[0_1px_3px_0_rgba(0,0,0,0.04)]">
-                <div className="aspect-[3/4] bg-gradient-to-br from-[#EBF1FA] to-[#dce7f5] flex items-center justify-center p-8">
-                  <p className="font-serif text-xl font-bold text-[#2C5AA0] text-center leading-snug">
-                    {book.title}
-                  </p>
+                <div className="relative aspect-[3/4] bg-gradient-to-br from-[#EBF1FA] to-[#dce7f5] flex items-center justify-center p-8">
+                  {book.isbn ? (
+                    <Image
+                      src={`https://covers.openlibrary.org/b/isbn/${book.isbn}-L.jpg`}
+                      alt={book.title}
+                      fill
+                      className="object-cover"
+                      unoptimized
+                    />
+                  ) : (
+                    <p className="font-serif text-xl font-bold text-[#2C5AA0] text-center leading-snug">
+                      {book.title}
+                    </p>
+                  )}
                 </div>
               </div>
 
