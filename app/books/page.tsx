@@ -33,6 +33,7 @@ export default async function BooksPage() {
     totalCopies: book.totalCopies,
     coverUrl: book.coverUrl,
     description: book.description,
+    isbn: book.isbn ?? null,
   }))
 
   return (

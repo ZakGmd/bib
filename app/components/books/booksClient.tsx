@@ -16,6 +16,7 @@ type Book = {
   totalCopies: number
   coverUrl: string | null
   description: string | null
+  isbn: string | null
 }
 
 type BooksClientProps = {

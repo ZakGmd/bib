@@ -1,4 +1,5 @@
 // components/books/BookCard.tsx
+import Image from "next/image"
 import Link from "next/link"
 import { RequestLoanButton } from "./requestLoanButton"
 
@@ -12,6 +13,7 @@ interface Book {
   totalCopies: number
   coverUrl: string | null
   description: string | null
+  isbn: string | null
 }
 
 interface BookCardProps {
@@ -29,9 +31,19 @@ export function BookCard({ book, isAuthenticated, isAlreadyRequested }: BookCard
     <article className="bg-white border border-[#E5E9ED] rounded-xl overflow-hidden transition-all duration-200 flex flex-col shadow-[0_1px_2px_0_rgba(0,0,0,0.03)] hover:border-[#D1D8DF] hover:shadow-[0_10px_15px_-3px_rgba(0,0,0,0.08),0_4px_6px_-2px_rgba(0,0,0,0.04)] hover:-translate-y-0.5 group">
       {/* Book cover */}
       <div className="relative w-full aspect-square bg-gradient-to-br from-[#f5f7fa] to-[#e8ecf1] flex items-center justify-center overflow-hidden">
-        <div className="font-serif text-2xl font-bold text-[#718096] text-center p-5 leading-tight">
-          {book.title}
-        </div>
+        {book.isbn ? (
+          <Image
+            src={`https://covers.openlibrary.org/b/isbn/${book.isbn}-M.jpg`}
+            alt={book.title}
+            fill
+            className="object-cover"
+            unoptimized
+          />
+        ) : (
+          <div className="font-serif text-2xl font-bold text-[#718096] text-center p-5 leading-tight">
+            {book.title}
+          </div>
+        )}
         
         {/* Availability badge */}
         <div className="absolute top-3 right-3 py-2 rounded-lg text-xs font-semibold shadow-sm backdrop-blur-sm">

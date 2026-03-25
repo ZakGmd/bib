@@ -11,7 +11,8 @@ export default async function DashboardBooksPage() {
     }),
     prisma.author.findMany({ orderBy: { name: "asc" } }),
   ])
-
+  
+   
   const booksData = books.map((b) => ({
     id: b.id,
     title: b.title,
