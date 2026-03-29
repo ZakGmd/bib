@@ -8,16 +8,25 @@ export default function AboutPage() {
       <main className="min-h-screen bg-[#FAFBFC]">
 
         {/* ── Header ── */}
-        <section className="max-w-[1100px] mx-auto px-6 md:px-8 pt-20 pb-16 border-b border-[#E5E9ED]">
-          <p className="text-xs font-bold uppercase tracking-widest text-[#2C5AA0] mb-4">
-            About BIB-ESTO
-          </p>
-          <h1 className="font-serif text-[3rem] font-bold text-[#1A202C] leading-[1.1] tracking-tight max-w-[640px] mb-5">
-            The library service of ESTO
-          </h1>
-          <p className="text-[1.125rem] text-[#4A5568] leading-relaxed max-w-[560px]">
-            BIB-ESTO is the digital library management system of the École Supérieure de Technologie d'Oujda — making it easy for the academic community to borrow and return books.
-          </p>
+        <section className="max-w-[1100px] w-full mx-auto px-6 md:px-8 pt-20 pb-16 border-b border-[#E5E9ED]">
+          <div className="w-full flex items-center justify-between">
+            <div className="flex flex-col items-start">
+              <p className="text-xs font-bold uppercase tracking-widest text-[#2C5AA0] mb-4">
+              About BIB-ESTO
+            </p>
+            <h1 className="font-serif text-[3rem] font-bold text-[#1A202C] leading-[1.1] tracking-tight max-w-[640px] mb-5">
+              The library service of ESTO
+            </h1>
+            <p className="text-[1.125rem] text-[#4A5568] leading-relaxed max-w-[560px]">
+              BIB-ESTO is the digital library management system of the École Supérieure de Technologie d'Oujda — making it easy for the academic community to borrow and return books.
+            </p>
+            </div>
+            
+            <div className="overflow-hidden w-full h-full">
+              <img src="/logo.png" alt="BIB-ESTO" loading="lazy" className="h-full w-full object-cover" />
+            </div>
+          </div>         
+          
         </section>
 
         {/* ── Mission ── */}

@@ -121,7 +121,8 @@ export default function LoginPage() {
             </div>
 
             {/* Submit */}
-            <button
+            <div className="flex flex-col items-start gap-2 2-full">
+              <button
               type="submit"
               disabled={loading}
               className="w-full px-5 py-3 bg-[#2C5AA0] text-white rounded-lg text-[0.9375rem] font-semibold hover:bg-[#234780] transition-all duration-150 shadow-sm hover:shadow-md hover:-translate-y-px disabled:opacity-60 disabled:cursor-not-allowed disabled:translate-y-0 disabled:shadow-sm"
@@ -136,6 +137,11 @@ export default function LoginPage() {
                 </span>
               ) : "Sign in"}
             </button>
+            <Link href={"/"} className="w-full text-center px-5 py-3 bg-[#E5E9ED] text-black rounded-lg text-[0.9375rem] font-semibold  transition-all duration-150 shadow-sm " >
+              Guess mode
+            </Link>
+            </div>
+            
 
           </form>
         </div>

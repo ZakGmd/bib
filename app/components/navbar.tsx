@@ -10,12 +10,12 @@ export async function Navbar() {
       <div className="max-w-[1600px] mx-auto px-6 md:px-8 h-14 flex items-center justify-between">
 
         {/* Logo */}
-        <Link href={session?.user?.role === "LIBRARIAN" || session?.user?.role === "ADMIN" ? "/dashboard" : "/books"} className="flex items-center gap-2.5 group">
           <div className="flex items-center gap-2.5">
-           <img src="bib/public/logo.png"  className="h-8 w-auto rounded-lg" />
+            <img src="/logo.png" alt="BIB-ESTO" className="h-7 w-auto" />
+           
            <span className="font-serif font-bold text-[#1A202C] text-[1.0625rem]">BIB-ESTO</span>
          </div>
-        </Link>
+        
 
         {/* Nav links — guests & students only */}
         {(!session || (session.user.role !== "LIBRARIAN" && session.user.role !== "ADMIN")) && (

@@ -41,12 +41,12 @@ export const proxy = auth((req) => {
   }
 
   if (!isPublic && !isLoggedIn) {
-    return NextResponse.redirect(new URL("/login", nextUrl))
+    return NextResponse.redirect(new URL("/", nextUrl))
   }
 
   return NextResponse.next()
 })
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|.*\\.png|.*\\.jpg|.*\\.jpeg|.*\\.svg|.*\\.ico|.*\\.webp).*)"],
 }
