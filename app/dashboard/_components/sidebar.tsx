@@ -84,7 +84,7 @@ export function Sidebar({ user }: { user: SidebarUser }) {
           </span>
         </div>
         <button
-          onClick={() => signOut({ callbackUrl: "/login" })}
+          onClick={() => signOut({ callbackUrl: window.location.origin + "/login" })}
           className="w-full flex items-center gap-2 px-3 py-2 text-sm text-[#718096] hover:text-[#C53030] hover:bg-[#FFF5F5] rounded-lg transition-all duration-150"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
