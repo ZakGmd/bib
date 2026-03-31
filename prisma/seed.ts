@@ -57,12 +57,12 @@ async function main() {
     },
   })
 
-  const admin = await prisma.user.create({
+  await prisma.user.create({
     data: {
       name: 'Admin User',
       email: 'admin@example.com',
       password: hashedPassword,
-      role: 'ADMIN',
+      role: 'LIBRARIAN',
       phone: '+212 6 45 67 89 01',
       address: 'Rabat, Morocco',
     },

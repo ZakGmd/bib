@@ -18,11 +18,12 @@ export async function Navbar() {
         
 
         {/* Nav links — guests & students only */}
-        {(!session || (session.user.role !== "LIBRARIAN" && session.user.role !== "ADMIN")) && (
+        {(!session || (session.user.role !== "LIBRARIAN")) && (
           <nav className="hidden md:flex items-center gap-7">
             <Link href="/" className="text-sm font-medium text-[#4A5568] hover:text-[#1A202C] transition-colors duration-150">Home</Link>
             <Link href="/books" className="text-sm font-medium text-[#4A5568] hover:text-[#1A202C] transition-colors duration-150">Books</Link>
             <Link href="/about" className="text-sm font-medium text-[#4A5568] hover:text-[#1A202C] transition-colors duration-150">About</Link>
+            <Link href="/contact" className="text-sm font-medium text-[#4A5568] hover:text-[#1A202C] transition-colors duration-150">Contact</Link>
           </nav>
         )}
 
@@ -30,7 +31,7 @@ export async function Navbar() {
         <div className="flex items-center gap-6">
           {session ? (
             <>
-              {session.user.role === "LIBRARIAN" || session.user.role === "ADMIN" ? (
+              {session.user.role === "LIBRARIAN" ? (
                 <Link href="/dashboard" className="text-sm font-medium text-[#4A5568] hover:text-[#1A202C] transition-colors duration-150">
                   Dashboard
                 </Link>

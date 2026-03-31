@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 
 function canManage(role: string) {
-  return role === "LIBRARIAN" || role === "ADMIN"
+  return role === "LIBRARIAN"
 }
 
 export type BookFormData = {
@@ -113,7 +113,10 @@ export async function deleteBook(bookId: string) {
     })
     if (activeLoans > 0) throw new Error("Cannot delete a book with active loans")
 
-    await prisma.book.delete({ where: { id: bookId } })
+    await prisma.$transaction(async (tx) => {
+      await tx.loan.deleteMany({ where: { bookId } })
+      await tx.book.delete({ where: { id: bookId } })
+    })
 
     revalidatePath("/dashboard/books")
     revalidatePath("/books")

@@ -27,7 +27,6 @@ enum UserRole {
   STUDENT
   PROFESSOR
   LIBRARIAN
-  ADMIN
 }
 
 model Author {

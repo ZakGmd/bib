@@ -154,9 +154,9 @@ export default function LoginPage() {
           <div className="grid grid-cols-2 gap-x-4 gap-y-2.5">
             {[
               { role: "Student",   email: "student@example.com" },
-              { role: "Professor", email: "professor@example.com" },
+              { role: "Professor", email: "professor@example.com" } ,
               { role: "Librarian", email: "librarian@example.com" },
-              { role: "Admin",     email: "admin@example.com" },
+              
             ].map(({ role, email }) => (
               <button
                 key={role}

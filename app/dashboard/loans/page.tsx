@@ -9,7 +9,6 @@ export default async function LoansPage() {
     },
     orderBy: [{ status: "asc" }, { requestDate: "desc" }],
   })
-
   const data = loans.map((loan) => ({
     id: loan.id,
     status: loan.status as string,

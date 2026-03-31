@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma"
 import { revalidatePath } from "next/cache"
 
 function canManage(role: string) {
-  return role === "LIBRARIAN" || role === "ADMIN"
+  return role === "LIBRARIAN"
 }
 
 export async function requestLoan(bookId: string) {

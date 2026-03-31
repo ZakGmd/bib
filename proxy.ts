@@ -10,7 +10,7 @@ export const proxy = auth((req) => {
   const isLoggedIn = !!session
   const role = session?.user?.role
 
-  const isStaffRole = role === "LIBRARIAN" || role === "ADMIN"
+  const isStaffRole = role === "LIBRARIAN"
 
   const isPublic = PUBLIC_ROUTES.some(
     (route) =>

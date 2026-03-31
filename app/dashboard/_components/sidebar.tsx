@@ -38,9 +38,18 @@ const NAV = [
       </svg>
     ),
   },
+  {
+    href: "/dashboard/messages",
+    label: "Messages",
+    icon: (
+      <svg className="w-[18px] h-[18px] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+      </svg>
+    ),
+  },
 ]
 
-export function Sidebar({ user }: { user: SidebarUser }) {
+export function Sidebar({ user, unreadMessages = 0 }: { user: SidebarUser; unreadMessages?: number }) {
   const pathname = usePathname()
 
   return (
@@ -57,6 +66,7 @@ export function Sidebar({ user }: { user: SidebarUser }) {
       <nav className="flex-1 px-3 py-4 flex flex-col gap-0.5">
         {NAV.map(({ href, label, icon }) => {
           const active = pathname.startsWith(href)
+          const isMessages = href === "/dashboard/messages"
           return (
             <Link
               key={href}
@@ -68,7 +78,12 @@ export function Sidebar({ user }: { user: SidebarUser }) {
               }`}
             >
               {icon}
-              {label}
+              <span className="flex-1">{label}</span>
+              {isMessages && unreadMessages > 0 && (
+                <span className="px-1.5 py-0.5 bg-[#D97706] text-white text-[0.625rem] font-bold rounded-full leading-none">
+                  {unreadMessages}
+                </span>
+              )}
             </Link>
           )
         })}
